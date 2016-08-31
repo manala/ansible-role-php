@@ -1,0 +1,64 @@
+---
+
+- hosts: localhost
+
+  vars:
+
+    manala_php_version: "{{ {'wheezy': '5', 'jessie': '7.0'}[ansible_distribution_release] }}"
+    manala_php_blackfire: true
+    manala_php_blackfire_agent:
+      - server-id: c74906db-43d3-4c96-ab27-010600321b89
+      - server-token: 5b78cc7fea3b766ff4ea470178b502c829c09d58ebdc20252e0337db804000e2
+    manala_php_blackfire_client:
+      - client-id: b7bf7d2d-c8c1-4354-82bf-aa403afbc3b3
+      - client-token: e7d9ca7e486b67d1f2d9b764fb383340fbd374e20daefa747e8a4fd690d83e7b
+
+  pre_tasks:
+    # Configuring the PHP Debian repository
+    - name: test blackfire > Register the Dotdeb key
+      apt_key: url='http://www.dotdeb.org/dotdeb.gpg' state=present validate_certs=no
+    - name: test blackfire > Add Dotdeb preferences
+      apt_repository:
+        repo: "deb http://packages.dotdeb.org {{ ansible_distribution_release }} all"
+
+    # Configuring the Blackfire Debian repository
+    - name: test blackfire > Register the packagecloud key
+      apt_key: url='https://packagecloud.io/gpg.key' state=present validate_certs=no
+    - name: test blackfire > Add Blackfire repository
+      apt_repository: repo='deb http://packages.blackfire.io/debian any main' state=present
+
+  roles:
+    - manala.php
+
+  post_tasks:
+
+    # Goss
+    - name: Goss
+      raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss validate' }}"
+      with_items:
+        - package:
+            blackfire-agent:
+              installed: true
+        - package:
+            blackfire-php:
+              installed: true
+        - file:
+            /etc/blackfire/agent:
+              exists: true
+              contains:
+                - server-id=c74906db-43d3-4c96-ab27-010600321b89
+                - server-token=5b78cc7fea3b766ff4ea470178b502c829c09d58ebdc20252e0337db804000e2
+            ~/.blackfire.ini:
+              exists: true
+              contains:
+                - client-id=b7bf7d2d-c8c1-4354-82bf-aa403afbc3b3
+                - client-token=e7d9ca7e486b67d1f2d9b764fb383340fbd374e20daefa747e8a4fd690d83e7b
+        - process:
+            blackfire-agent:
+              running: true
+        - command:
+            blackfire status:
+              exit-status: 0
+        - command:
+            if hash php5-fpm 2>/dev/null ; then php5-fpm -m|grep blackfire ; else php-fpm7.0 -m |grep blackfire ; fi:
+              exit-status: 0
