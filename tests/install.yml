@@ -1,0 +1,145 @@
+---
+
+- hosts: all
+  tasks:
+  - apt_key:
+      url: http://www.dotdeb.org/dotdeb.gpg
+      id:  89DF5277
+
+- name: Install - Wheezy - Php 5.4
+  hosts: wheezy
+  vars:
+    manala_php_version: 5
+  pre_tasks:
+    - apt:
+        package: php*
+        state:   absent
+        purge:   true
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php55 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php56 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy all
+  roles:
+    - manala.php
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php5-common:
+              installed: true
+            php5-cli:
+              installed: true
+        - command:
+            php --version:
+              exit-status: 0
+              stdout:
+                - PHP 5.4.
+
+- name: Install - Wheezy - Php 5.5
+  hosts: wheezy
+  vars:
+    manala_php_version: 5
+  pre_tasks:
+    - apt:
+        package: php*
+        state:   absent
+        purge:   true
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php56 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php55 all
+  roles:
+    - manala.php
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php5-common:
+              installed: true
+            php5-cli:
+              installed: true
+        - command:
+            php --version:
+              exit-status: 0
+              stdout:
+                - PHP 5.5.
+
+- name: Install - Wheezy - Php 5.6
+  hosts: wheezy
+  vars:
+    manala_php_version: 5
+  pre_tasks:
+    - apt:
+        package: php*
+        state:   absent
+        purge:   true
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php55 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php56 all
+  roles:
+    - manala.php
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php5-common:
+              installed: true
+            php5-cli:
+              installed: true
+        - command:
+            php --version:
+              exit-status: 0
+              stdout:
+                - PHP 5.6.
+
+- name: Install - Jessie - 7.0
+  hosts: jessie
+  vars:
+    manala_php_version: 7.0
+  pre_tasks:
+    - apt:
+        package: php*
+        state:   absent
+        purge:   true
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org jessie all
+  roles:
+    - manala.php
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php7.0-common:
+              installed: true
+            php7.0-cli:
+              installed: true
+            php7.0-json:
+              installed: true
+            php7.0-opcache:
+              installed: true
+            php7.0-readline:
+              installed: true
+        - command:
+            php --version:
+              exit-status: 0
+              stdout:
+                - PHP 7.0.

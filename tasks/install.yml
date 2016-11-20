@@ -7,4 +7,7 @@
     install_recommends: false
     update_cache:       true
     cache_valid_time:   3600
-  with_items: "{{ manala_php_sapis|map('regex_replace','^(.*)$','php' ~ manala_php_version|string ~ '-\\1')|list }}"
+  with_manala_php_install_packages:
+    - "{{ manala_php_version|string }}"
+    - "{{ manala_php_sapis }}"
+    - "{{ manala_php_extensions }}"
