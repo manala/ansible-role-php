@@ -137,5 +137,50 @@
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
-            php7.0-cli:
+            php7.0-intl:
               installed: true
+            php7.0-curl:
+              installed: true
+            php7.0-mbstring:
+              installed: true
+            php7.0-xml:
+              installed: true
+            php7.0-zip:
+              installed: true
+
+    # optional attributes
+    #stdout:
+    #- go version go1.6 linux/amd64
+    #stderr: []
+    #timeout: 10000 # in milliseconds
+
+    # manala_php_version: "{{ {'wheezy': '5', 'jessie': '7.0'}[ansible_distribution_release] }}"
+    #manala_php_sapis:
+    #  - fpm
+    # manala_php_extensions:
+    #   - intl
+    #   - curl
+    #   - mbstring
+    #   - xml
+    #   - zip
+
+
+# # 7
+# - cli      # Sapi systématique
+# - common   # dépendance des sapis cli et fpm
+# - json     # dépendance des sapis cli et fpm
+# - opcache  # dépendance des sapis cli et fpm
+# - readline # dépendance des sapis cli
+# - fpm
+# - intl
+# - curl
+# - mbstring
+# - xml
+# - zip
+#
+# # 5
+# - cli      # Sapi systématique
+# - common   # dépendance des sapis cli et fpm
+# - fpm
+# - intl
+# - curl

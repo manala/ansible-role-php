@@ -4,7 +4,16 @@
 manala_php_version: ~
 
 # Sapis
-manala_php_sapis: ['cli', 'fpm']
+# fpm dépend de cli pour 7.0 et 5.6
+# mais pas pour 5.5 et 5.4
+# On peut donc envisager de forcer l'installation de cli systematiquement
+#manala_php_sapis: ['cli', 'fpm']
+manala_php_sapis_exclusive: false
+manala_php_sapis: []
+
+# Extensions
+manala_php_extensions_exclusive: false
+manala_php_extensions: []
 
 # Configs
 manala_php_configs_dir_base:  "/etc/php{{ (manala_php_version|string == '5')|ternary('5', '/' ~ manala_php_version|string) }}"
@@ -24,10 +33,6 @@ manala_php_fpm_pools:
     template: fpm_pools/default.j2
     config:
       - www
-
-# Extensions
-manala_php_extensions_exclusive: false
-manala_php_extensions: []
 
 # User
 manala_php_user:  www-data

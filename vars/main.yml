@@ -4,14 +4,15 @@
 manala_php_versions:
   '5':
     release:          wheezy
-    package_template: php5-{package}
+    #package_template: php5-{package}
+    package_prefix: php5-
     packages_common:
-      - common
+      - common   # dépendance des sapis cli et fpm
     sapis_available:
       - fpm
     sapis_forced:
       - cli
-    extensions_embedded:
+    extensions_embedded: # Pre compiled modules available as extensions for php 7.0
       - bcmath
       - bz2
       - dba
@@ -22,22 +23,18 @@ manala_php_versions:
       - zip
   '7.0':
     release:          jessie
-    package_template: php7.0-{package}
+    #package_template: php7.0-{package}
+    package_prefix: php7.0-
     packages_common:
-      - common
-      - json
-      - opcache
-      - readline
+      - common   # dépendance des sapis cli et fpm
+      - json     # dépendance des sapis cli et fpm
+      - opcache  # dépendance des sapis cli et fpm
+      - readline # dépendance des sapis cli
     sapis_available:
       - fpm
     sapis_forced:
       - cli
     extensions_embedded: []
-
-# Extensions
-manala_php_extensions_exclude: "{{ (['common', 'cli', 'fpm'] + ('cli' in manala_php_sapis)|ternary(manala_php_extensions_exclude_cli, []) + ('fpm' in manala_php_sapis)|ternary(manala_php_extensions_exclude_fpm, []))|map('regex_replace','^(.*)$','php' ~ manala_php_version|string ~ '-\\1')|list }}"
-manala_php_extensions_exclude_cli: ['readline']
-manala_php_extensions_exclude_fpm: "{{ (manala_php_version|string == '5')|ternary(['json'], ['json', 'opcache']) }}"
 
 # Applications
 manala_php_applications_patterns:

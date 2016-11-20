@@ -1,0 +1,76 @@
+---
+
+- hosts: all
+  tasks:
+  - apt_key:
+      url: http://www.dotdeb.org/dotdeb.gpg
+      id:  89DF5277
+
+- name: Install - Exclusive - Jessie - 7.0
+  hosts: jessie
+  vars:
+    manala_php_version: 7.0
+    manala_php_sapis_exclusive: true
+    manala_php_extensions_exclusive: true
+    manala_php_extensions:
+      - intl
+  # pre_tasks:
+  #   - apt_repository:
+  #       repo: deb http://packages.dotdeb.org jessie all
+  #   - apt:
+  #       package: "{{ item }}"
+  #     with_items:
+  #       - php7.0-fpm
+  #       - php7.0-curl
+  roles:
+    - manala.php
+  # post_tasks:
+  #   - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+  #     with_items:
+  #       - package:
+  #           php7.0-cli:
+  #             installed: true
+  #           php7.0-fpm:
+  #             installed: false
+  #           php7.0-intl:
+  #             installed: true
+  #           php7.0-curl:
+  #             installed: false
+
+
+    # optional attributes
+    #stdout:
+    #- go version go1.6 linux/amd64
+    #stderr: []
+    #timeout: 10000 # in milliseconds
+
+    # manala_php_version: "{{ {'wheezy': '5', 'jessie': '7.0'}[ansible_distribution_release] }}"
+    #manala_php_sapis:
+    #  - fpm
+    # manala_php_extensions:
+    #   - intl
+    #   - curl
+    #   - mbstring
+    #   - xml
+    #   - zip
+
+
+# # 7
+# - cli      # Sapi systématique
+# - common   # dépendance des sapis cli et fpm
+# - json     # dépendance des sapis cli et fpm
+# - opcache  # dépendance des sapis cli et fpm
+# - readline # dépendance des sapis cli
+# - fpm
+# - intl
+# - curl
+# - mbstring
+# - xml
+# - zip
+#
+# # 5
+# - cli      # Sapi systématique
+# - common   # dépendance des sapis cli et fpm
+# - fpm
+# - intl
+# - curl

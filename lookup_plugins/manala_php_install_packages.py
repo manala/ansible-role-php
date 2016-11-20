@@ -11,17 +11,22 @@ class LookupModule(LookupBase):
         results = []
 
         # Version parameters
-        version = variables['manala_php_versions'][terms[0]]
+        version = terms[2]
+
+        #packagesInstalled = terms[3]
 
         # Sapis
-        sapis = self._flatten(terms[1])
+        sapis = self._flatten(terms[0])
         # Intersection with available sapis (dedupe on the same occasion)
         sapis = list(set(sapis) & set(version['sapis_available']))
         # Merge with forced sapis
         sapis += version['sapis_forced']
 
+        # Sapis exclusice
+        #sapisExclusive = terms[1]
+
         # Extensions
-        extensions = self._flatten(terms[2])
+        extensions = self._flatten(terms[1])
         # Diff with extensions embedded and so on (dedupe on the same occasion)
         extensions = list(
             set(extensions)
@@ -31,9 +36,16 @@ class LookupModule(LookupBase):
             - set(version['packages_common'])
         )
 
+        # Extensions exclusice
+        #extensionsExclusive = terms[3]
+
+        #print(terms)
+        #print(version)
+        #print(packagesInstalled)
+
         for package in (sapis + extensions):
             results.append(
-                version['package_template'].format(package=package)
+                version['package_prefix'] + package
             )
 
         return results

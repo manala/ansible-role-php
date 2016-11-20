@@ -1,13 +1,45 @@
 ---
 
 - name: install > Packages
-  apt:
-    name:  "{{ item }}"
-    state: present
-    install_recommends: false
-    update_cache:       true
-    cache_valid_time:   3600
+  debug:
+    var: item
+  # apt:
+  #   name:  "{{ item }}"
+  #   state: present
+  #   install_recommends: false
+  #   update_cache:       true
+  #   cache_valid_time:   3600
   with_manala_php_install_packages:
-    - "{{ manala_php_version|string }}"
-    - "{{ manala_php_sapis }}"
-    - "{{ manala_php_extensions }}"
+    - "{{ manala_php_sapis|list }}"
+    #- "{{ manala_php_sapis_exclusive|bool }}"
+    - "{{ manala_php_extensions|list }}"
+    #- "{{ manala_php_extensions_exclusive|bool }}"
+    - "{{ manala_php_versions[manala_php_version|string] }}"
+    #- "{{ __manala_php_install_packages_result.stdout_lines }}"
+
+- name: install > Checks already installed packages
+  shell: "dpkg --get-selections '{{ manala_php_versions[manala_php_version|string]['package_prefix'] }}*'|grep -v deinstall|cut -f 1"
+  register: __manala_php_install_packages_result
+  always_run: true
+  ignore_errors: true
+  changed_when: false
+  when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
+
+# - debug:
+#     var: __manala_php_install_packages_result
+#   when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
+
+- name: install > Exclusive
+  debug:
+    var: item
+  # apt:
+  #   name:  "{{ item }}"
+  #   state: absent
+  with_manala_php_install_exclusive:
+    - "{{ manala_php_sapis|list }}"
+    - "{{ manala_php_sapis_exclusive|bool }}"
+    - "{{ manala_php_extensions|list }}"
+    - "{{ manala_php_extensions_exclusive|bool }}"
+    - "{{ manala_php_versions[manala_php_version|string] }}"
+    - "{{ __manala_php_install_packages_result.stdout_lines }}"
+  when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
