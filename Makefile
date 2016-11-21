@@ -88,11 +88,7 @@ test@jessie:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-test: test-requirements test-install test-install-sapis test-install-extensions install-exclusive test-blackfire
-
-test-requirements:
-	ansible-playbook tests/requirements.yml --syntax-check
-	ansible-playbook tests/requirements.yml
+test: test-install test-install-sapis test-install-extensions install-exclusive test-blackfire
 
 test-install:
 	ansible-playbook tests/install.yml --syntax-check
