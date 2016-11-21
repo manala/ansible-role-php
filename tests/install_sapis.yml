@@ -2,9 +2,9 @@
 
 - hosts: all
   tasks:
-  - apt_key:
-      url: http://www.dotdeb.org/dotdeb.gpg
-      id:  89DF5277
+    - apt_key:
+        url: http://www.dotdeb.org/dotdeb.gpg
+        id:  89DF5277
 
 - name: Install - Sapis - Wheezy - Php 5.4
   hosts: wheezy
