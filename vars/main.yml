@@ -3,16 +3,15 @@
 # Versions
 manala_php_versions:
   '5':
-    release:          wheezy
-    #package_template: php5-{package}
+    release: wheezy
     package_prefix: php5-
-    packages_common:
-      - common   # dépendance des sapis cli et fpm
-    sapis_available:
-      - fpm
-    sapis_forced:
+    # Available sapis
+    sapis:
       - cli
-    extensions_embedded: # Pre compiled modules available as extensions for php 7.0
+      - fpm
+      - cgi
+    # Embedded extensions
+    extensions:
       - bcmath
       - bz2
       - dba
@@ -22,19 +21,15 @@ manala_php_versions:
       - xml
       - zip
   '7.0':
-    release:          jessie
-    #package_template: php7.0-{package}
+    release: jessie
     package_prefix: php7.0-
-    packages_common:
-      - common   # dépendance des sapis cli et fpm
-      - json     # dépendance des sapis cli et fpm
-      - opcache  # dépendance des sapis cli et fpm
-      - readline # dépendance des sapis cli
-    sapis_available:
-      - fpm
-    sapis_forced:
+    # Available sapis
+    sapis:
       - cli
-    extensions_embedded: []
+      - fpm
+      - cgi
+    # Embedded extensions
+    extensions: []
 
 # Applications
 manala_php_applications_patterns:

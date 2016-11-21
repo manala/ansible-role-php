@@ -6,71 +6,170 @@
       url: http://www.dotdeb.org/dotdeb.gpg
       id:  89DF5277
 
+- name: Install - Exclusive - Wheezy - 5.4
+  hosts: wheezy
+  vars:
+    manala_php_version: 5
+    manala_php_sapis_exclusive: true
+    manala_php_sapis:
+      - cli
+    manala_php_extensions_exclusive: true
+    manala_php_extensions:
+      - intl
+  pre_tasks:
+    - apt:
+        package: php*
+        state:   absent
+        purge:   true
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php55 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php56 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy all
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php5-fpm
+        - php5-curl
+  roles:
+    - manala.php
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php5-cli:
+              installed: true
+            php5-fpm:
+              installed: false
+            php5-intl:
+              installed: true
+            php5-curl:
+              installed: false
+
+- name: Install - Exclusive - Wheezy - 5.5
+  hosts: wheezy
+  vars:
+    manala_php_version: 5
+    manala_php_sapis_exclusive: true
+    manala_php_sapis:
+      - cli
+    manala_php_extensions_exclusive: true
+    manala_php_extensions:
+      - intl
+  pre_tasks:
+    - apt:
+        package: php*
+        state:   absent
+        purge:   true
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php56 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php55 all
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php5-fpm
+        - php5-curl
+  roles:
+    - manala.php
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php5-cli:
+              installed: true
+            php5-fpm:
+              installed: false
+            php5-intl:
+              installed: true
+            php5-curl:
+              installed: false
+
+- name: Install - Exclusive - Wheezy - 5.6
+  hosts: wheezy
+  vars:
+    manala_php_version: 5
+    manala_php_sapis_exclusive: true
+    manala_php_sapis:
+      - cli
+    manala_php_extensions_exclusive: true
+    manala_php_extensions:
+      - intl
+  pre_tasks:
+    - apt:
+        package: php*
+        state:   absent
+        purge:   true
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php55 all
+        state: absent
+        update_cache: false
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org wheezy-php56 all
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php5-fpm
+        - php5-curl
+  roles:
+    - manala.php
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php5-cli:
+              installed: true
+            php5-fpm:
+              installed: false
+            php5-intl:
+              installed: true
+            php5-curl:
+              installed: false
+
 - name: Install - Exclusive - Jessie - 7.0
   hosts: jessie
   vars:
     manala_php_version: 7.0
     manala_php_sapis_exclusive: true
+    manala_php_sapis:
+      - cli
     manala_php_extensions_exclusive: true
     manala_php_extensions:
       - intl
-  # pre_tasks:
-  #   - apt_repository:
-  #       repo: deb http://packages.dotdeb.org jessie all
-  #   - apt:
-  #       package: "{{ item }}"
-  #     with_items:
-  #       - php7.0-fpm
-  #       - php7.0-curl
+  pre_tasks:
+    - apt_repository:
+        repo: deb http://packages.dotdeb.org jessie all
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php7.0-fpm
+        - php7.0-curl
   roles:
     - manala.php
-  # post_tasks:
-  #   - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
-  #     with_items:
-  #       - package:
-  #           php7.0-cli:
-  #             installed: true
-  #           php7.0-fpm:
-  #             installed: false
-  #           php7.0-intl:
-  #             installed: true
-  #           php7.0-curl:
-  #             installed: false
-
-
-    # optional attributes
-    #stdout:
-    #- go version go1.6 linux/amd64
-    #stderr: []
-    #timeout: 10000 # in milliseconds
-
-    # manala_php_version: "{{ {'wheezy': '5', 'jessie': '7.0'}[ansible_distribution_release] }}"
-    #manala_php_sapis:
-    #  - fpm
-    # manala_php_extensions:
-    #   - intl
-    #   - curl
-    #   - mbstring
-    #   - xml
-    #   - zip
-
-
-# # 7
-# - cli      # Sapi systématique
-# - common   # dépendance des sapis cli et fpm
-# - json     # dépendance des sapis cli et fpm
-# - opcache  # dépendance des sapis cli et fpm
-# - readline # dépendance des sapis cli
-# - fpm
-# - intl
-# - curl
-# - mbstring
-# - xml
-# - zip
-#
-# # 5
-# - cli      # Sapi systématique
-# - common   # dépendance des sapis cli et fpm
-# - fpm
-# - intl
-# - curl
+  post_tasks:
+    - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
+      with_items:
+        - package:
+            php7.0-cli:
+              installed: true
+            php7.0-fpm:
+              installed: false
+            php7.0-intl:
+              installed: true
+            php7.0-curl:
+              installed: false

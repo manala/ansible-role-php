@@ -13,37 +13,24 @@ class LookupModule(LookupBase):
         # Version parameters
         version = terms[2]
 
-        #packagesInstalled = terms[3]
-
         # Sapis
         sapis = self._flatten(terms[0])
         # Intersection with available sapis (dedupe on the same occasion)
-        sapis = list(set(sapis) & set(version['sapis_available']))
-        # Merge with forced sapis
-        sapis += version['sapis_forced']
-
-        # Sapis exclusice
-        #sapisExclusive = terms[1]
+        sapis = list(set(sapis) & set(version['sapis']))
 
         # Extensions
         extensions = self._flatten(terms[1])
-        # Diff with extensions embedded and so on (dedupe on the same occasion)
+        # Diff with embedded extensions and so on (dedupe on the same occasion)
         extensions = list(
             set(extensions)
-            - set(version['extensions_embedded'])
-            - set(version['sapis_available'])
-            - set(version['sapis_forced'])
-            - set(version['packages_common'])
+            - set(version['extensions'])
+            - set(version['sapis'])
         )
 
-        # Extensions exclusice
-        #extensionsExclusive = terms[3]
+        # Packages
+        packages = sapis + extensions
 
-        #print(terms)
-        #print(version)
-        #print(packagesInstalled)
-
-        for package in (sapis + extensions):
+        for package in packages:
             results.append(
                 version['package_prefix'] + package
             )

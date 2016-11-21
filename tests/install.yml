@@ -10,6 +10,8 @@
   hosts: wheezy
   vars:
     manala_php_version: 5
+    manala_php_sapis:
+      - cli
   pre_tasks:
     - apt:
         package: php*
@@ -45,6 +47,8 @@
   hosts: wheezy
   vars:
     manala_php_version: 5
+    manala_php_sapis:
+      - cli
   pre_tasks:
     - apt:
         package: php*
@@ -80,6 +84,8 @@
   hosts: wheezy
   vars:
     manala_php_version: 5
+    manala_php_sapis:
+      - cli
   pre_tasks:
     - apt:
         package: php*
@@ -115,6 +121,8 @@
   hosts: jessie
   vars:
     manala_php_version: 7.0
+    manala_php_sapis:
+      - cli
   pre_tasks:
     - apt:
         package: php*
