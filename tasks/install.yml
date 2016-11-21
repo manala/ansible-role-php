@@ -46,7 +46,7 @@
     | xargs \
     | tr ' ' '\n' \
     | grep {{ manala_php_versions[manala_php_version|string]['package_prefix'] }} \
-    | uniq --unique
+    | uniq
   register: __manala_php_install_packages_dependencies_result
   always_run: true
   changed_when: false
