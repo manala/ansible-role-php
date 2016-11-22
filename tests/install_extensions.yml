@@ -1,11 +1,5 @@
 ---
 
-- hosts: all
-  tasks:
-    - apt_key:
-        url: http://www.dotdeb.org/dotdeb.gpg
-        id:  89DF5277
-
 - name: Install - Extensions - Wheezy - Php 5.4
   hosts: wheezy
   vars:
@@ -17,20 +11,7 @@
       - xml
       - zip
   pre_tasks:
-    - apt:
-        package: php*
-        state:   absent
-        purge:   true
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy-php55 all
-        state: absent
-        update_cache: false
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy-php56 all
-        state: absent
-        update_cache: false
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy all
+    - include: pre_tasks/dotdeb_wheezy.yml
   roles:
     - manala.php
   post_tasks:
@@ -53,20 +34,7 @@
       - xml
       - zip
   pre_tasks:
-    - apt:
-        package: php*
-        state:   absent
-        purge:   true
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy all
-        state: absent
-        update_cache: false
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy-php56 all
-        state: absent
-        update_cache: false
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy-php55 all
+    - include: pre_tasks/dotdeb_wheezy_55.yml
   roles:
     - manala.php
   post_tasks:
@@ -89,20 +57,7 @@
       - xml
       - zip
   pre_tasks:
-    - apt:
-        package: php*
-        state:   absent
-        purge:   true
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy all
-        state: absent
-        update_cache: false
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy-php55 all
-        state: absent
-        update_cache: false
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org wheezy-php56 all
+    - include: pre_tasks/dotdeb_wheezy_56.yml
   roles:
     - manala.php
   post_tasks:
@@ -125,12 +80,7 @@
       - xml
       - zip
   pre_tasks:
-    - apt:
-        package: php*
-        state:   absent
-        purge:   true
-    - apt_repository:
-        repo: deb http://packages.dotdeb.org jessie all
+    - include: pre_tasks/dotdeb_jessie.yml
   roles:
     - manala.php
   post_tasks:
