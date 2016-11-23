@@ -10,6 +10,7 @@ manala_php_versions:
       - cli
       - fpm
       - cgi
+      - phpdbg
     # Embedded extensions
     extensions:
       - bcmath
@@ -28,6 +29,7 @@ manala_php_versions:
       - cli
       - fpm
       - cgi
+      - phpdbg
     # Embedded extensions
     extensions: []
 
