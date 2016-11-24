@@ -5,6 +5,7 @@
     package: php*
     state:   absent
     purge:   true
+  ignore_errors: true
 
 - name: Pre tasks > Dotdeb apt key
   apt_key:
