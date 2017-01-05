@@ -1,9 +1,9 @@
 ---
 
 # Requirements
-- include: requirements.yml
-  tags:
-    - manala_php
+# - include: requirements.yml
+#   tags:
+#     - manala_php
 
 # Install
 - include: install.yml

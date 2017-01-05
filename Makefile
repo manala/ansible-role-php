@@ -109,3 +109,6 @@ test-install-exclusive:
 test-blackfire:
 	ansible-playbook tests/blackfire.yml --syntax-check
 	ansible-playbook tests/blackfire.yml
+
+test-test:
+	ansible-playbook tests/test.yml

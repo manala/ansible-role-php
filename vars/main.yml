@@ -32,6 +32,8 @@ manala_php_versions:
       - phpdbg
     # Embedded extensions
     extensions: []
+    #extensions:
+    #  - prout
 
 # Applications
 manala_php_applications_patterns:

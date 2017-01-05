@@ -1,26 +1,63 @@
 ---
 
-- name: install > Packages set
-  set_fact:
-    __manala_php_install_packages: "{{ lookup(
-      'manala_php_install_packages',
-      manala_php_sapis|list,
-      manala_php_extensions|list,
-      manala_php_versions[manala_php_version|string],
-      wantlist=True
-    ) }}"
-  always_run: true
+# - debug:
+#     var: manala_php_sapis
 
-- name: install > Packages
-  apt:
-    name:  "{{ item }}"
-    state: present
-    install_recommends: false
-    update_cache:       true
-    cache_valid_time:   3600
-  with_items: "{{ __manala_php_install_packages }}"
+# - debug:
+#     var: item
+#   with_items: "{{ lookup(
+#             'manala_php_sapis_packages',
+#             manala_php_sapis,
+#             manala_php_versions[manala_php_version|string],
+#             wantexclusive=manala_php_sapis_exclusive,
+#             wantprefix=True,
+#             wantstate='present',
+#             wantmap='package',
+#             wantlist=True
+#           )
+#     }}"
+#
+# - debug:
+#     var: item
+#   with_items: "{{ lookup(
+#             'manala_php_extensions_packages',
+#             manala_php_extensions,
+#             manala_php_versions[manala_php_version|string],
+#             wantprefix=True,
+#             wantstate='present',
+#             wantmap='package',
+#             wantlist=True
+#           )
+#     }}"
+#
+# - debug:
+#     var: item
+#   with_items: "{{ lookup(
+#             'manala_php_sapis_packages',
+#             manala_php_sapis,
+#             manala_php_versions[manala_php_version|string],
+#             wantexclusive=manala_php_sapis_exclusive,
+#             wantprefix=True,
+#             wantstate='absent',
+#             wantmap='package',
+#             wantlist=True
+#           )
+#     }}"
+#
+# - debug:
+#     var: item
+#   with_items: "{{ lookup(
+#             'manala_php_extensions_packages',
+#             manala_php_extensions,
+#             manala_php_versions[manala_php_version|string],
+#             wantprefix=True,
+#             wantstate='absent',
+#             wantmap='package',
+#             wantlist=True
+#           )
+#     }}"
 
-- name: install > Exclusive - Packages requirements
+- name: install > Packages present
   apt:
     name:  "{{ item }}"
     state: present
@@ -28,51 +65,132 @@
     update_cache:       true
     cache_valid_time:   3600
   with_items:
-    - debfoster
+    - "{{ lookup(
+            'manala_php_sapis_packages',
+            manala_php_sapis,
+            manala_php_versions[manala_php_version|string],
+            wantexclusive=manala_php_sapis_exclusive,
+            wantprefix=True,
+            wantstate='present',
+            wantmap='package',
+            wantlist=True
+          )
+    }}"
+    - "{{ lookup(
+            'manala_php_extensions_packages',
+            manala_php_extensions,
+            manala_php_versions[manala_php_version|string],
+            wantprefix=True,
+            wantstate='present',
+            wantmap='package',
+            wantlist=True
+          )
+    }}"
 
-- name: install > Exclusive - Packages dependencies
-  shell: |
-    (
-      for package in {{ __manala_php_install_packages|join(' ') }};
-        do debfoster \
-          --quiet \
-          --option UseRecommends=no \
-          --show-depends \
-          $package \
-          | tail --lines +2 \
-        ;
-      done; \
-    ) \
-    | xargs \
-    | tr ' ' '\n' \
-    | grep {{ manala_php_versions[manala_php_version|string]['package_prefix'] }} \
-    | uniq
-  register: __manala_php_install_packages_dependencies_result
-  always_run: true
-  changed_when: false
-  when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
-
-- name: install > Exclusive - Packages installed
-  shell: |
-    dpkg \
-      --get-selections \
-      '{{ manala_php_versions[manala_php_version|string]['package_prefix'] }}*' \
-    | grep \
-      --invert-match \
-      deinstall \
-    | cut \
-      --fields 1
-  register: __manala_php_install_packages_installed_result
-  always_run: true
-  changed_when: false
-  when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
-
-- name: install > Exclusive - Packages
+- name: install > Packages absent
   apt:
     name:  "{{ item }}"
     state: absent
-  with_manala_php_install_packages_exclusive:
-    - "{{ __manala_php_install_packages|list }}"
-    - "{{ __manala_php_install_packages_dependencies_result.stdout_lines|list }}"
-    - "{{ __manala_php_install_packages_installed_result.stdout_lines|list }}"
-  when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
+    purge:      true
+    autoremove: true
+  with_items:
+    - "{{ lookup(
+            'manala_php_sapis_packages',
+            manala_php_sapis,
+            manala_php_versions[manala_php_version|string],
+            wantexclusive=manala_php_sapis_exclusive,
+            wantprefix=True,
+            wantstate='absent',
+            wantmap='package',
+            wantlist=True
+          )
+    }}"
+    - "{{ lookup(
+            'manala_php_extensions_packages',
+            manala_php_extensions,
+            manala_php_versions[manala_php_version|string],
+            wantprefix=True,
+            wantstate='absent',
+            wantmap='package',
+            wantlist=True
+          )
+    }}"
+
+
+
+# - name: install > Packages set
+#   set_fact:
+#     __manala_php_install_packages: "{{ lookup(
+#       'manala_php_install_packages',
+#       manala_php_sapis|list,
+#       manala_php_extensions|list,
+#       manala_php_versions[manala_php_version|string],
+#       wantlist=True
+#     ) }}"
+#   always_run: true
+#
+# - name: install > Packages
+#   apt:
+#     name:  "{{ item }}"
+#     state: present
+#     install_recommends: false
+#     update_cache:       true
+#     cache_valid_time:   3600
+#   with_items: "{{ __manala_php_install_packages }}"
+#
+# - name: install > Exclusive - Packages requirements
+#   apt:
+#     name:  "{{ item }}"
+#     state: present
+#     install_recommends: false
+#     update_cache:       true
+#     cache_valid_time:   3600
+#   with_items:
+#     - debfoster
+#
+# - name: install > Exclusive - Packages dependencies
+#   shell: |
+#     (
+#       for package in {{ __manala_php_install_packages|join(' ') }};
+#         do debfoster \
+#           --quiet \
+#           --option UseRecommends=no \
+#           --show-depends \
+#           $package \
+#           | tail --lines +2 \
+#         ;
+#       done; \
+#     ) \
+#     | xargs \
+#     | tr ' ' '\n' \
+#     | grep {{ manala_php_versions[manala_php_version|string]['package_prefix'] }} \
+#     | uniq
+#   register: __manala_php_install_packages_dependencies_result
+#   always_run: true
+#   changed_when: false
+#   when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
+#
+# - name: install > Exclusive - Packages installed
+#   shell: |
+#     dpkg \
+#       --get-selections \
+#       '{{ manala_php_versions[manala_php_version|string]['package_prefix'] }}*' \
+#     | grep \
+#       --invert-match \
+#       deinstall \
+#     | cut \
+#       --fields 1
+#   register: __manala_php_install_packages_installed_result
+#   always_run: true
+#   changed_when: false
+#   when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
+#
+# - name: install > Exclusive - Packages
+#   apt:
+#     name:  "{{ item }}"
+#     state: absent
+#   with_manala_php_install_packages_exclusive:
+#     - "{{ __manala_php_install_packages|list }}"
+#     - "{{ __manala_php_install_packages_dependencies_result.stdout_lines|list }}"
+#     - "{{ __manala_php_install_packages_installed_result.stdout_lines|list }}"
+#   when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
