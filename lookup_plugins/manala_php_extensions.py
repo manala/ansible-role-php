@@ -13,26 +13,16 @@ class LookupModule(LookupBase):
         # Version parameters
         version = terms[1]
 
-        wantprefix = kwargs.pop('wantprefix', False)
-        wantstate  = kwargs.pop('wantstate', None)
-        wantmap    = kwargs.pop('wantmap', None)
+        wantstate = kwargs.pop('wantstate', None)
+        wantmap   = kwargs.pop('wantmap', False)
 
-        #########
-        # Sapis #
-        #########
+        ##############
+        # Extensions #
+        ##############
 
         itemDefault = {
             'state': 'present'
         }
-
-        # Exclusive
-        wantexclusive = kwargs.pop('wantexclusive', False)
-
-        if wantexclusive:
-            results = [{
-                'package': sapi,
-                'state':   'absent'
-            } for sapi in version['sapis']]
 
         for term in self._flatten(terms[0]):
 
@@ -42,24 +32,24 @@ class LookupModule(LookupBase):
                 # Short syntax
                 item = itemDefault.copy()
                 item.update({
-                    'package': term
+                    'extension': term
                 })
             else:
                 # Must be a dict
                 if not isinstance(term, dict):
                     raise AnsibleError('Expect a dict')
-                if not term.has_key('sapi'):
-                    raise AnsibleError('Expect "sapi" key')
+                if not term.has_key('extension'):
+                    raise AnsibleError('Expect "extension" key')
                 item = itemDefault.copy()
                 item.update(term)
-                item.update({
-                    'package': item.get('sapi')
-                })
-                item.pop('sapi', None)
 
-            # Known sapi ?
-            if item.get('package') not in version['sapis']:
-                raise AnsibleError('Unknown sapi "' + item.get('package') + '"')
+            # Known as a sapi ?
+            if item.get('extension') in version['sapis']:
+                raise AnsibleError('Extension "' + item.get('extension') + '" is known as a sapi')
+
+            # Already embedded extension ?
+            if item.get('extension') in version['extensions']:
+                continue
 
             items.append(item)
 
@@ -67,7 +57,7 @@ class LookupModule(LookupBase):
             for item in items:
                 itemFound = False
                 for i, result in enumerate(results):
-                    if result['package'] == item['package']:
+                    if result['extension'] == item['extension']:
                         results[i] = item
                         itemFound = True
                         break
@@ -75,19 +65,12 @@ class LookupModule(LookupBase):
                 if not itemFound:
                     results.append(item)
 
-        # Prefix package name
-        if wantprefix:
-            for i, result in enumerate(results):
-                result.update({
-                    'package': version['package_prefix'] + result.get('package')
-                })
-
         # Filter by state
         if wantstate:
             results = [result for result in results if result.get('state') == wantstate]
 
         # Map
         if wantmap:
-            results = [result.get(wantmap) for result in results]
+            results = [result.get('extension') for result in results]
 
         return results
