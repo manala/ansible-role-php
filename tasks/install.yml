@@ -129,8 +129,12 @@
   changed_when: false
   when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
 
-- debug:
-    var: item
+- name: install > Exclusive - Packages absents
+  apt:
+    name:  "{{ manala_php_versions[manala_php_version|string]['package_prefix'] ~ item }}"
+    state: absent
+    purge:      true
+    autoremove: true
   with_manala_php_install_packages_exclusive:
     - "{{
         (
@@ -157,13 +161,3 @@
     - "{{ manala_php_sapis_exclusive }}"
     - "{{ manala_php_extensions_exclusive }}"
     - "{{ manala_php_versions[manala_php_version|string] }}"
-
-# - name: install > Exclusive - Packages
-#   apt:
-#     name:  "{{ item }}"
-#     state: absent
-#   with_manala_php_install_packages_exclusive:
-#     - "{{ __manala_php_install_packages|list }}"
-#     - "{{ __manala_php_install_packages_dependencies_result.stdout_lines|list }}"
-#     - "{{ __manala_php_install_packages_installed_result.stdout_lines|list }}"
-#   when: manala_php_sapis_exclusive or manala_php_extensions_exclusive
