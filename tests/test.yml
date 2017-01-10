@@ -6,9 +6,9 @@
   vars:
     manala_php_version: 7.0
     manala_php_sapis_exclusive: true
+    manala_php_extensions_exclusive: true
     manala_php_sapis:
       - cli
-      #- prout
       - sapi: fpm
         state: present
       - sapi: cgi
@@ -21,7 +21,7 @@
         state: absent
       - xml
       - zip
-  #pre_tasks:
-  #  - include: pre_tasks/dotdeb_jessie.yml
+  pre_tasks:
+    - include: pre_tasks/dotdeb_jessie.yml
   roles:
     - manala.php

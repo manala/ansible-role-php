@@ -8,21 +8,39 @@ class LookupModule(LookupBase):
 
     def run(self, terms, variables=None, **kwargs):
 
-        results = []
+        packagesAbsents = []
 
         # Packages
         packages = self._flatten(terms[0])
 
+        # Packages presents
+        packagesPresents = self._flatten(terms[1])
+
         # Packages dependencies
-        packagesDependencies = self._flatten(terms[1])
+        packagesDependencies = self._flatten(terms[2])
 
-        # Packages installed
-        packagesInstalled = self._flatten(terms[2])
+        # Version parameters
+        version = terms[5]
 
-        # Compute lists difference
-        packagesExclusive = list(set(packagesInstalled) - set(packages + packagesDependencies))
+        # Exclusive - Sapis
+        exclusive = terms[3]
 
-        for package in packagesExclusive:
-            results.append(package)
+        if exclusive:
+            packagesSapis         = list(set(packages) & set(version['sapis']))
+            packagesSapisPresents = list(set(packagesPresents) & set(version['sapis']))
 
-        return results
+            packagesAbsents += list(set(packagesSapisPresents) - set(packagesSapis))
+
+        # Exclusive - Extensions
+        exclusive = terms[4]
+
+        if exclusive:
+            packagesExtensions         = list(set(packages) - set(version['sapis']))
+            packagesExtensionsPresents = list(set(packagesPresents) - set(version['sapis']))
+
+            packagesAbsents += list(set(packagesExtensionsPresents) - set(packagesExtensions))
+
+        # Remove packages dependencies
+        packagesAbsents = list(set(packagesAbsents) - set(packagesDependencies))
+
+        return packagesAbsents
