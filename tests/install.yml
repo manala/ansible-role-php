@@ -4,20 +4,48 @@
   hosts: wheezy
   vars:
     manala_php_version: 5
+    manala_php_sapis_exclusive: false
     manala_php_sapis:
       - cli
+      - sapi:  fpm
+        state: present
+      - sapi:  cgi
+        state: absent
+    manala_php_extensions_exclusive: false
+    manala_php_extensions:
+      - mbstring
+      - xml
+      - zip
+      - intl
+      - extension: curl
+        state:     present
+      - extension: tidy
+        state:     absent
   pre_tasks:
     - include: pre_tasks/dotdeb_wheezy.yml
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php5-cgi
+        - php5-tidy
   roles:
     - manala.php
   post_tasks:
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
-            php5-common:
-              installed: true
             php5-cli:
               installed: true
+            php5-fpm:
+              installed: true
+            php5-cgi:
+              installed: false
+            php5-intl:
+              installed: true
+            php5-curl:
+              installed: true
+            php5-tidy:
+              installed: false
         - command:
             php --version:
               exit-status: 0
@@ -28,20 +56,48 @@
   hosts: wheezy
   vars:
     manala_php_version: 5
+    manala_php_sapis_exclusive: false
     manala_php_sapis:
       - cli
+      - sapi:  fpm
+        state: present
+      - sapi:  cgi
+        state: absent
+    manala_php_extensions_exclusive: false
+    manala_php_extensions:
+      - mbstring
+      - xml
+      - zip
+      - intl
+      - extension: curl
+        state:     present
+      - extension: tidy
+        state:     absent
   pre_tasks:
     - include: pre_tasks/dotdeb_wheezy_55.yml
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php5-cgi
+        - php5-tidy
   roles:
     - manala.php
   post_tasks:
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
-            php5-common:
-              installed: true
             php5-cli:
               installed: true
+            php5-fpm:
+              installed: true
+            php5-cgi:
+              installed: false
+            php5-intl:
+              installed: true
+            php5-curl:
+              installed: true
+            php5-tidy:
+              installed: false
         - command:
             php --version:
               exit-status: 0
@@ -52,20 +108,48 @@
   hosts: wheezy
   vars:
     manala_php_version: 5
+    manala_php_sapis_exclusive: false
     manala_php_sapis:
       - cli
+      - sapi:  fpm
+        state: present
+      - sapi:  cgi
+        state: absent
+    manala_php_extensions_exclusive: false
+    manala_php_extensions:
+      - mbstring
+      - xml
+      - zip
+      - intl
+      - extension: curl
+        state:     present
+      - extension: tidy
+        state:     absent
   pre_tasks:
     - include: pre_tasks/dotdeb_wheezy_56.yml
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php5-cgi
+        - php5-tidy
   roles:
     - manala.php
   post_tasks:
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
-            php5-common:
-              installed: true
             php5-cli:
               installed: true
+            php5-fpm:
+              installed: true
+            php5-cgi:
+              installed: false
+            php5-intl:
+              installed: true
+            php5-curl:
+              installed: true
+            php5-tidy:
+              installed: false
         - command:
             php --version:
               exit-status: 0
@@ -76,26 +160,56 @@
   hosts: jessie
   vars:
     manala_php_version: 7.0
+    manala_php_sapis_exclusive: false
     manala_php_sapis:
       - cli
+      - sapi:  fpm
+        state: present
+      - sapi:  cgi
+        state: absent
+    manala_php_extensions_exclusive: false
+    manala_php_extensions:
+      - mbstring
+      - xml
+      - zip
+      - intl
+      - extension: curl
+        state:     present
+      - extension: tidy
+        state:     absent
   pre_tasks:
     - include: pre_tasks/dotdeb_jessie.yml
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php7.0-cgi
+        - php7.0-tidy
   roles:
     - manala.php
   post_tasks:
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
-            php7.0-common:
-              installed: true
             php7.0-cli:
               installed: true
-            php7.0-json:
+            php7.0-fpm:
               installed: true
-            php7.0-opcache:
+            php7.0-cgi:
+              installed: false
+            php7.0-mbstring:
               installed: true
-            php7.0-readline:
+            php7.0-xml:
               installed: true
+            php7.0-zip:
+              installed: true
+            php7.0-intl:
+              installed: true
+            php7.0-intl:
+              installed: true
+            php7.0-curl:
+              installed: true
+            php7.0-tidy:
+              installed: false
         - command:
             php --version:
               exit-status: 0
