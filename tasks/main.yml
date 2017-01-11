@@ -20,23 +20,16 @@
   when: manala_php_configs_global
   tags:
     - manala_php
-#
-# # Configs - Sapi Fpm
-# - include: configs_sapi.yml
-#   vars:
-#     __manala_php_sapi: fpm
-#   when: (not manala_php_configs_global) and ('fpm' in manala_php_sapis)
-#   tags:
-#     - manala_php
-#
-# # Configs - Sapi Cli
-# - include: configs_sapi.yml
-#   vars:
-#     __manala_php_sapi: cli
-#   when: (not manala_php_configs_global) and ('cli' in manala_php_sapis)
-#   tags:
-#     - manala_php
-#
+
+# Configs
+- include: configs.yml
+  when: not manala_php_configs_global
+  with_items: "{{ manala_php_sapis }}"
+  loop_control:
+    loop_var: __manala_php_sapi
+  tags:
+    - manala_php
+
 # # Fpm pools
 # - include: fpm_pools.yml
 #   when: ('fpm' in manala_php_sapis)

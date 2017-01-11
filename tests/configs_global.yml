@@ -27,6 +27,7 @@
         package: "{{ item }}"
       with_items:
         - php5-cli
+        - php5-fpm
     - copy:
         dest:    /etc/php5/conf.d/baz.ini
         content: |
@@ -42,7 +43,27 @@
               filetype: file
               contains:
                 - "memory_limit = 456M"
+            /etc/php5/cli/conf.d/foo.ini:
+              exists:   true
+              filetype: file
+              contains:
+                - "memory_limit = 456M"
+            /etc/php5/fpm/conf.d/foo.ini:
+              exists:   true
+              filetype: file
+              contains:
+                - "memory_limit = 456M"
             /etc/php5/conf.d/bar.ini:
+              exists:   true
+              filetype: file
+              contains:
+                - "memory_limit = 256M"
+            /etc/php5/cli/conf.d/bar.ini:
+              exists:   true
+              filetype: file
+              contains:
+                - "memory_limit = 256M"
+            /etc/php5/fpm/conf.d/bar.ini:
               exists:   true
               filetype: file
               contains:
