@@ -1,7 +1,7 @@
 ---
 
 - name: php fpm restart
-  command: "php{{ (manala_php_version|string == '5')|ternary('5', '') }}-fpm{{ (manala_php_version|string == '5')|ternary('', manala_php_version|string) }} -t"
+  command: "{{ manala_php_versions[manala_php_version|string]['fpm_bin'] }} -t"
   when: "'fpm' in manala_php_sapis"
   changed_when: true
   notify:
@@ -9,13 +9,9 @@
 
 - name: do php fpm restart
   service:
-    name:  "php{{ manala_php_version|string }}-fpm"
+    name:  "{{ manala_php_versions[manala_php_version|string]['fpm_service'] }}"
     state: restarted
   when: "'fpm' in manala_php_sapis"
-
-- name: php cli restart
-  debug:
-    msg: "skip php-cli restart"
 
 - name: blackfire-agent restart
   service:

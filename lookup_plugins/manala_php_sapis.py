@@ -28,18 +28,22 @@ class LookupModule(LookupBase):
 
             items = []
 
+            # Short syntax
             if isinstance(term, basestring):
-                # Short syntax
                 item = itemDefault.copy()
                 item.update({
                     'sapi': term
                 })
             else:
+
                 # Must be a dict
                 if not isinstance(term, dict):
                     raise AnsibleError('Expect a dict')
+
+                # Check index key
                 if not term.has_key('sapi'):
                     raise AnsibleError('Expect "sapi" key')
+
                 item = itemDefault.copy()
                 item.update(term)
 

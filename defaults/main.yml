@@ -12,10 +12,9 @@ manala_php_extensions_exclusive: true # Ensure backward compatibility
 manala_php_extensions:           []
 
 # Configs
-manala_php_configs_dir_base:  "/etc/php{{ (manala_php_version|string == '5')|ternary('5', '/' ~ manala_php_version|string) }}"
+manala_php_configs_global:    false # Php 5.4
 manala_php_configs_template:  ~
 manala_php_configs_exclusive: false
-manala_php_configs_global:    false
 manala_php_configs:           []
 manala_php_fpm_configs:       []
 manala_php_cli_configs:       []

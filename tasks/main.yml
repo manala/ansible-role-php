@@ -15,11 +15,11 @@
   tags:
     - manala_php
 
-# # Configs - Global
-# - include: configs_global.yml
-#   when: manala_php_configs_global
-#   tags:
-#     - manala_php
+# Configs - Global
+- include: configs_global.yml
+  when: manala_php_configs_global
+  tags:
+    - manala_php
 #
 # # Configs - Sapi Fpm
 # - include: configs_sapi.yml
