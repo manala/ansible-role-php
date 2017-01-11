@@ -7,6 +7,11 @@
     purge:   true
   ignore_errors: true
 
+- name: Pre tasks > Clean php config
+  file:
+    path:  /etc/php
+    state: absent
+
 - name: Pre tasks > Dotdeb apt key
   apt_key:
     url: http://www.dotdeb.org/dotdeb.gpg

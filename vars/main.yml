@@ -5,8 +5,8 @@ manala_php_versions:
   '5':
     release:        wheezy
     package_prefix: php5-
-    bin_enmod:      php5enmod
-    bin_dismod:     php5dismod
+    enmod_bin:      /usr/sbin/php5enmod
+    dismod_bin:     /usr/sbin/php5dismod
     sapis:
       #############
       # Available #
@@ -72,8 +72,8 @@ manala_php_versions:
   '7.0':
     release:        jessie
     package_prefix: php7.0-
-    bin_enmod:      phpenmod
-    bin_dismod:     phpdismod
+    enmod_bin:      /usr/sbin/phpenmod
+    dismod_bin:     /usr/sbin/phpdismod
     sapis:
       #############
       # Available #
