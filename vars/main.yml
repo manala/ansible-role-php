@@ -3,8 +3,10 @@
 # Versions
 manala_php_versions:
   '5':
-    release: wheezy
+    release:        wheezy
     package_prefix: php5-
+    bin_enmod:      php5enmod
+    bin_dismod:     php5dismod
     sapis:
       #############
       # Available #
@@ -68,8 +70,10 @@ manala_php_versions:
       #########
       #- readline # 5.5/5.6
   '7.0':
-    release: jessie
+    release:        jessie
     package_prefix: php7.0-
+    bin_enmod:      phpenmod
+    bin_dismod:     phpdismod
     sapis:
       #############
       # Available #

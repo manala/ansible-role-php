@@ -1,0 +1,27 @@
+---
+
+- name: extensions > Enabled
+  shell: |
+    {{ manala_php_versions[manala_php_version|string]['bin_enmod'] }} {{
+      lookup(
+        'manala_php_extensions',
+        manala_php_extensions,
+        manala_php_versions[manala_php_version|string],
+        wantenabled=true,
+        wantmap=true,
+        wantlist=true
+      )|join(' ')
+    }}
+
+- name: extensions > Disabled
+  shell: |
+    {{ manala_php_versions[manala_php_version|string]['bin_dismod'] }} {{
+      lookup(
+        'manala_php_extensions',
+        manala_php_extensions,
+        manala_php_versions[manala_php_version|string],
+        wantenabled=false,
+        wantmap=true,
+        wantlist=true
+      )|join(' ')
+    }}

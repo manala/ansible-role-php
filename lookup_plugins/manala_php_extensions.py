@@ -13,15 +13,17 @@ class LookupModule(LookupBase):
         # Version parameters
         version = terms[1]
 
-        wantstate = kwargs.pop('wantstate', None)
-        wantmap   = kwargs.pop('wantmap', False)
+        wantstate   = kwargs.pop('wantstate', None)
+        wantenabled = kwargs.pop('wantenabled', None)
+        wantmap     = kwargs.pop('wantmap', False)
 
         ##############
         # Extensions #
         ##############
 
         itemDefault = {
-            'state': 'present'
+            'state':   'present',
+            'enabled': None
         }
 
         for term in self._flatten(terms[0]):
@@ -68,6 +70,10 @@ class LookupModule(LookupBase):
         # Filter by state
         if wantstate is not None:
             results = [result for result in results if result.get('state') == wantstate]
+
+        # Filter by enabled
+        if wantenabled is not None:
+            results = [result for result in results if result.get('enabled') == wantenabled]
 
         # Map
         if wantmap:
