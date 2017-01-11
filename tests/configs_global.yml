@@ -23,6 +23,10 @@
           - memory_limit: 256M
   pre_tasks:
     - include: pre_tasks/dotdeb_wheezy.yml
+    - apt:
+        package: "{{ item }}"
+      with_items:
+        - php5-cli
     - copy:
         dest:    /etc/php5/conf.d/baz.ini
         content: |
