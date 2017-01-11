@@ -66,7 +66,7 @@ class LookupModule(LookupBase):
                     results.append(item)
 
         # Filter by state
-        if wantstate:
+        if wantstate is not None:
             results = [result for result in results if result.get('state') == wantstate]
 
         # Map

@@ -14,16 +14,16 @@
         manala_php_sapis,
         manala_php_versions[manala_php_version|string],
         wantstate='present',
-        wantmap=True,
-        wantlist=True
+        wantmap=true,
+        wantlist=true
       )
       + lookup(
         'manala_php_extensions',
         manala_php_extensions,
         manala_php_versions[manala_php_version|string],
         wantstate='present',
-        wantmap=True,
-        wantlist=True
+        wantmap=true,
+        wantlist=true
       )
     )|map('regex_replace', '(.*)', manala_php_versions[manala_php_version|string]['package_prefix'] ~ '\\1')|list
   }}"
@@ -41,16 +41,16 @@
         manala_php_sapis,
         manala_php_versions[manala_php_version|string],
         wantstate='absent',
-        wantmap=True,
-        wantlist=True
+        wantmap=true,
+        wantlist=true
       )
       + lookup(
         'manala_php_extensions',
         manala_php_extensions,
         manala_php_versions[manala_php_version|string],
         wantstate='absent',
-        wantmap=True,
-        wantlist=True
+        wantmap=true,
+        wantlist=true
       )
     )|map('regex_replace', '(.*)', manala_php_versions[manala_php_version|string]['package_prefix'] ~ '\\1')|list
   }}"
@@ -96,16 +96,16 @@
             manala_php_sapis,
             manala_php_versions[manala_php_version|string],
             wantstate='present',
-            wantmap=True,
-            wantlist=True
+            wantmap=true,
+            wantlist=true
           )
           + lookup(
             'manala_php_extensions',
             manala_php_extensions,
             manala_php_versions[manala_php_version|string],
             wantstate='present',
-            wantmap=True,
-            wantlist=True
+            wantmap=true,
+            wantlist=true
           )
         )|map('regex_replace', '(.*)', manala_php_versions[manala_php_version|string]['package_prefix'] ~ '\1')|join(' ')
       }};
@@ -143,16 +143,16 @@
             manala_php_sapis,
             manala_php_versions[manala_php_version|string],
             wantstate='present',
-            wantmap=True,
-            wantlist=True
+            wantmap=true,
+            wantlist=true
           )
           + lookup(
             'manala_php_extensions',
             manala_php_extensions,
             manala_php_versions[manala_php_version|string],
             wantstate='present',
-            wantmap=True,
-            wantlist=True
+            wantmap=true,
+            wantlist=true
           )
         )
     }}"
