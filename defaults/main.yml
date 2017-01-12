@@ -30,10 +30,6 @@ manala_php_fpm_pools:
     config:
       - www
 
-# User
-manala_php_user:  www-data
-manala_php_group: www-data
-
 # Logs
 manala_php_log_dir: "/var/log/php{{ manala_php_version|string }}"
 

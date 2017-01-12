@@ -1,6 +1,11 @@
-{%- import '_macros.j2' as macros with context -%}
+{%- for configs in item.config|default(['www']) -%}
 
-{%- macro base(config) -%}
+    {%- for config_name, config in ({configs: []} if (configs is string) else configs).iteritems() -%}
+
+; Start a new pool named '{{ config_name }}'.
+; the variable $pool can we used in any directive and will be replaced by the
+; pool name ('{{ config_name }}' here)
+[{{ config_name }}]
 
 ; Per pool prefix
 ; It only applies on the following directives:
@@ -19,8 +24,8 @@
 ; Unix user/group of processes
 ; Note: The user is mandatory. If the group is not set, the default user's group
 ;       will be used.
-{{ macros.config_row(config, 'user', manala_php_user) }}
-{{ macros.config_row(config, 'group', manala_php_group) }}
+{{ macros.config_row(config, 'user', 'www-data') }}
+{{ macros.config_row(config, 'group', 'www-data') }}
 
 ; The address on which to accept FastCGI requests.
 ; Valid syntaxes are:
@@ -28,26 +33,29 @@
 ;                            a specific port;
 ;   '[ip:6:addr:ess]:port' - to listen on a TCP socket to a specific IPv6 address on
 ;                            a specific port;
-;   'port'                 - to listen on a TCP socket to all IPv4 addresses on a
-;                            specific port;
-;   '[::]:port'            - to listen on a TCP socket to all addresses
+;   'port'                 - to listen on a TCP socket to all addresses
 ;                            (IPv6 and IPv4-mapped) on a specific port;
 ;   '/path/to/unix/socket' - to listen on a unix socket.
 ; Note: This value is mandatory.
-{{ macros.config_row(config, 'listen', '/var/run/php-fpm.admin.sock') }}
+{{ macros.config_row(config, 'listen', config_default['listen']) }}
 
 ; Set listen(2) backlog.
-; Default Value: 65535 (-1 on FreeBSD and OpenBSD)
-{{ macros.config_row(config, 'listen.backlog', ';listen.backlog = 65535', true) }}
+; Default Value: 511 (-1 on FreeBSD and OpenBSD)
+{{ macros.config_row(config, 'listen.backlog', ';listen.backlog = 511', true) }}
 
 ; Set permissions for unix socket, if one is used. In Linux, read/write
 ; permissions must be set in order to allow connections from a web server. Many
 ; BSD-derived systems allow connections regardless of permissions.
 ; Default Values: user and group are set as the running user
 ;                 mode is set to 0660
-{{ macros.config_row(config, 'listen.owner', manala_php_user) }}
-{{ macros.config_row(config, 'listen.group', manala_php_group) }}
+{{ macros.config_row(config, 'listen.owner', 'www-data') }}
+{{ macros.config_row(config, 'listen.group', 'www-data') }}
 {{ macros.config_row(config, 'listen.mode', ';listen.mode = 0660', true) }}
+; When POSIX Access Control Lists are supported you can set them using
+; these options, value is a comma separated list of user/group names.
+; When set, listen.owner and listen.group are ignored
+{{ macros.config_row(config, 'listen.acl_users', ';listen.acl_users =', true) }}
+{{ macros.config_row(config, 'listen.acl_groups', ';listen.acl_groups =', true) }}
 
 ; List of addresses (IPv4/IPv6) of FastCGI clients which are allowed to connect.
 ; Equivalent to the FCGI_WEB_SERVER_ADDRS environment variable in the original
@@ -100,7 +108,7 @@
 ; forget to tweak pm.* to fit your needs.
 ; Note: Used when pm is set to 'static', 'dynamic' or 'ondemand'
 ; Note: This value is mandatory.
-{{ macros.config_row(config, 'pm.max_children', 20) }}
+{{ macros.config_row(config, 'pm.max_children', config_default['pm.max_children']) }}
 
 ; The number of child processes created on startup.
 ; Note: Used only when pm is set to 'dynamic'
@@ -219,7 +227,7 @@
 ;   last request memory:  0
 ;
 ; Note: There is a real-time FPM status monitoring sample web page available
-;       It's available in: /usr/share/php5/fpm/status.html
+;       It's available in: /usr/share/php/7.0/fpm/status.html
 ;
 ; Note: The value must start with a leading slash (/). The value can be
 ;       anything, but it may not be a good idea to use the .php extension or it
@@ -295,9 +303,13 @@
 ;  %t: server time the request was received
 ;      it can accept a strftime(3) format:
 ;      %d/%b/%Y:%H:%M:%S %z (default)
+;      The strftime(3) format must be encapsuled in a %{<strftime_format>}t tag
+;      e.g. for a ISO8601 formatted timestring, use: {% raw %}%{%Y-%m-%dT%H:%M:%S%z}t{% endraw %}
 ;  %T: time the log has been written (the request has finished)
 ;      it can accept a strftime(3) format:
 ;      %d/%b/%Y:%H:%M:%S %z (default)
+;      The strftime(3) format must be encapsuled in a %{<strftime_format>}t tag
+;      e.g. for a ISO8601 formatted timestring, use: {% raw %}%{%Y-%m-%dT%H:%M:%S%z}t{% endraw %}
 ;  %u: remote user
 ;
 ; Default: "%R - %u %t \"%m %r\" %s"
@@ -344,7 +356,7 @@
 ; Chdir to this directory at the start.
 ; Note: relative path can be used.
 ; Default Value: current directory or / when chroot
-{{ macros.config_row(config, 'chdir', '/') }}
+{{ macros.config_row(config, 'chdir', '/var/www', true) }}
 
 ; Redirect worker stdout and stderr into main error log. If not set, stdout and
 ; stderr will be redirected to /dev/null according to FastCGI specs.
@@ -368,7 +380,7 @@
 ; exectute php code.
 ; Note: set an empty value to allow all extensions.
 ; Default Value: .php
-{{ macros.config_row(config, 'security.limit_extensions', ';security.limit_extensions = .php .php3 .php4 .php5', true) }}
+{{ macros.config_row(config, 'security.limit_extensions', ';security.limit_extensions = .php .php3 .php4 .php5 .php7', true) }}
 
 ; Pass environment variables like LD_LIBRARY_PATH. All $VARIABLEs are taken from
 ; the current environment.
@@ -404,7 +416,9 @@
 {{ macros.config_row(config, 'php_admin_flag[log_errors]', ';php_admin_flag[log_errors] = on', true) }}
 {{ macros.config_row(config, 'php_admin_value[memory_limit]', ';php_admin_value[memory_limit] = 32M', true) }}
 
-{{ macros.config_row(config, 'php_admin_value[display_errors]', false) }}
+{% for config_extra_key, config_extra_value in config_extra.iteritems() -%}
+{{ macros.config_row(config, config_extra_key, config_extra_value) }}
+{%- endfor %}
 
 {{ macros.config(config, [
   'prefix',
@@ -415,6 +429,8 @@
   'listen.owner',
   'listen.group',
   'listen.mode',
+  'listen.acl_users',
+  'listen.acl_groups',
   'listen.allowed_clients',
   'process.priority',
   'pm',
@@ -448,8 +464,10 @@
   'php_flag[display_errors]',
   'php_admin_value[error_log]',
   'php_admin_flag[log_errors]',
-  'php_admin_value[memory_limit]',
-  'php_admin_value[display_errors]'
-]) -}}
+  'php_admin_value[memory_limit]'
+] + config_extra.keys()) -}}
 
-{%- endmacro -%}
+    {%- endfor %}
+
+
+{% endfor -%}

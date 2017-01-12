@@ -1,0 +1,11 @@
+{%- import '_macros.j2' as macros with context -%}
+
+{%- set config_default = {
+  'listen':          '/run/php/php7.0-fpm.sock',
+  'pm.max_children': 5
+} -%}
+
+{%- set config_extra = {
+} -%}
+
+{% include manala_php_version ~ '/_base.j2' %}
