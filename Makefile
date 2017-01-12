@@ -88,7 +88,7 @@ test@jessie:
 	printf "${COLOR_INFO}Run docker...${COLOR_RESET}\n"
 	$(DOCKER)
 
-test: test-install test-install-exclusive test-extensions test-configs-global test-configs test-fpm-pools
+test: test-install test-install-exclusive test-extensions test-configs-global test-configs test-fpm-pools test-blackfire
 
 test-install:
 	ansible-playbook tests/install.yml --syntax-check
@@ -113,3 +113,7 @@ test-configs:
 test-fpm-pools:
 	ansible-playbook tests/fpm_pools.yml --syntax-check
 	ansible-playbook tests/fpm_pools.yml
+
+test-blackfire:
+	ansible-playbook tests/blackfire.yml --syntax-check
+	ansible-playbook tests/blackfire.yml

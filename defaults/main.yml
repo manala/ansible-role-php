@@ -31,9 +31,6 @@ manala_php_fpm_pools:
       - www
 
 
-# Applications
-manala_php_applications_dir: /usr/local/bin
-manala_php_applications: []
 
 # Blackfire
 manala_php_blackfire:                false
@@ -45,3 +42,7 @@ manala_php_blackfire_agent:          []
 manala_php_blackfire_client_file:     ~/.blackfire.ini
 manala_php_blackfire_client_template: ~
 manala_php_blackfire_client:          []
+
+# Applications
+manala_php_applications_dir: /usr/local/bin
+manala_php_applications: []
