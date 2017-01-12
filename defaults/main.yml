@@ -12,7 +12,7 @@ manala_php_extensions_exclusive: false
 manala_php_extensions:           []
 
 # Configs
-manala_php_configs_global:    false # Php 5.4
+manala_php_configs_global:    false # Must be true for php 5.4
 manala_php_configs_template:  ~
 manala_php_configs_exclusive: false
 manala_php_configs:           []
