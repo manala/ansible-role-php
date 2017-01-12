@@ -58,12 +58,12 @@
   tags:
     - manala_php
 
-# # Services
-# - include: services.yml
-#   tags:
-#     - manala_php
-#     - manala.services
-#
+# Services
+- include: services.yml
+  tags:
+    - manala_php
+    - manala.services
+
 # # Applications
 # - include: applications.yml
 #   tags:
