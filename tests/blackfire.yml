@@ -22,12 +22,13 @@
   roles:
     - manala.php
   post_tasks:
+    - pause:
+        seconds: 3
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
             blackfire-agent:
               installed: true
-        - package:
             blackfire-php:
               installed: true
         - file:
@@ -41,13 +42,13 @@
               contains:
                 - client-id=b7bf7d2d-c8c1-4354-82bf-aa403afbc3b3
                 - client-token=e7d9ca7e486b67d1f2d9b764fb383340fbd374e20daefa747e8a4fd690d83e7b
-        - process:
+        - service:
             blackfire-agent:
+              enabled: true
               running: true
         - command:
             blackfire status:
               exit-status: 0
-        - command:
             php -m:
               exit-status: 0
               stdout:
@@ -79,12 +80,13 @@
   roles:
     - manala.php
   post_tasks:
+    - pause:
+        seconds: 3
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
             blackfire-agent:
               installed: true
-        - package:
             blackfire-php:
               installed: true
         - file:
@@ -98,13 +100,13 @@
               contains:
                 - client-id=b7bf7d2d-c8c1-4354-82bf-aa403afbc3b3
                 - client-token=e7d9ca7e486b67d1f2d9b764fb383340fbd374e20daefa747e8a4fd690d83e7b
-        - process:
+        - service:
             blackfire-agent:
+              enabled: true
               running: true
         - command:
             blackfire status:
               exit-status: 0
-        - command:
             php -m:
               exit-status: 0
               stdout:
@@ -136,12 +138,13 @@
   roles:
     - manala.php
   post_tasks:
+    - pause:
+        seconds: 3
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
             blackfire-agent:
               installed: true
-        - package:
             blackfire-php:
               installed: true
         - file:
@@ -155,13 +158,13 @@
               contains:
                 - client-id=b7bf7d2d-c8c1-4354-82bf-aa403afbc3b3
                 - client-token=e7d9ca7e486b67d1f2d9b764fb383340fbd374e20daefa747e8a4fd690d83e7b
-        - process:
+        - service:
             blackfire-agent:
+              enabled: true
               running: true
         - command:
             blackfire status:
               exit-status: 0
-        - command:
             php -m:
               exit-status: 0
               stdout:
@@ -193,12 +196,13 @@
   roles:
     - manala.php
   post_tasks:
+    - pause:
+        seconds: 3
     - raw: "{{ 'echo \"' ~ item|to_yaml ~ '\"|goss -g - validate' }}"
       with_items:
         - package:
             blackfire-agent:
               installed: true
-        - package:
             blackfire-php:
               installed: true
         - file:
@@ -212,13 +216,13 @@
               contains:
                 - client-id=b7bf7d2d-c8c1-4354-82bf-aa403afbc3b3
                 - client-token=e7d9ca7e486b67d1f2d9b764fb383340fbd374e20daefa747e8a4fd690d83e7b
-        - process:
+        - service:
             blackfire-agent:
+              enabled: true
               running: true
         - command:
             blackfire status:
               exit-status: 0
-        - command:
             php -m:
               exit-status: 0
               stdout:
