@@ -1,0 +1,17 @@
+---
+
+- name: Applications - Jessie - 7.0
+  hosts: jessie
+  vars:
+    manala_php_version: 7.0
+    manala_php_sapis_exclusive: false
+    manala_php_sapis:
+      - cli
+      - sapi:  fpm
+        state: present
+    manala_php_applications:
+      - composer
+  pre_tasks:
+    - include: pre_tasks/dotdeb_jessie.yml
+  roles:
+    - manala.php

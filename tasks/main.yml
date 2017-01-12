@@ -64,7 +64,7 @@
     - manala_php
     - manala.services
 
-# # Applications
-# - include: applications.yml
-#   tags:
-#     - manala_php
+# Applications
+- include: applications.yml
+  tags:
+    - manala_php
