@@ -30,8 +30,6 @@ manala_php_fpm_pools:
     config:
       - www
 
-# Logs
-manala_php_log_dir: "/var/log/php{{ manala_php_version|string }}"
 
 # Applications
 manala_php_applications_dir: /usr/local/bin

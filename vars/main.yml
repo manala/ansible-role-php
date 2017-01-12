@@ -10,6 +10,7 @@ manala_php_versions:
     fpm_bin:        /usr/sbin/php5-fpm
     fpm_service:    php5-fpm
     config_dir:     /etc/php5
+    log_dir:        /var/log/php5
     sapis:
       #############
       # Available #
@@ -80,6 +81,7 @@ manala_php_versions:
     fpm_bin:        /usr/sbin/php-fpm7.0
     fpm_service:    php7.0-fpm
     config_dir:     /etc/php/7.0
+    log_dir:        /var/log/php7.0
     sapis:
       #############
       # Available #
