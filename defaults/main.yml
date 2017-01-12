@@ -22,7 +22,6 @@ manala_php_cgi_configs:       []
 manala_php_phpdbg_configs:    []
 
 # Fpm pools
-manala_php_fpm_pools_dir:       "/etc/php{{ (manala_php_version|string == '5')|ternary('5', '/' ~ manala_php_version|string) }}/fpm/pool.d"
 manala_php_fpm_pools_template:  ~
 manala_php_fpm_pools_exclusive: false
 manala_php_fpm_pools:

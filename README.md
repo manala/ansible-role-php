@@ -13,7 +13,6 @@ manala_apt_preferences:
  - php@dotdeb
 ```
 
-
 ## Dependencies
 
 None.
@@ -52,7 +51,6 @@ Using ansible galaxy requirements file:
 | `manala_php_configs`             | [ ]                  | Array   | Shared configurations.                                 |
 | `manala_php_fpm_configs`         | [ ]                  | Array   | PHP fpm additional configurations.                     |
 | `manala_php_cli_configs`         | [ ]                  | Array   | PHP cli additional configurations.                     |
-| `manala_php_fpm_pools_dir`       | /etc/php5/fpm/pool.d | String  | PHP fpm pools directory path.                          |
 | `manala_php_fpm_pools_template`  | fpm_pools/empty.j2   | String  | Default pool template.                                 |
 | `manala_php_fpm_pools_exclusive` | false                | Boolean | Whether to remove all other non-specified pool files   |
 | `manala_php_fpm_pools`           | [ {name: www.conf} ] | Array   | PHP fpm pools configurations.                          |

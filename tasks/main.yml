@@ -39,12 +39,19 @@
   tags:
     - manala_php
 
-# # Fpm pools
-# - include: fpm_pools.yml
-#   when: ('fpm' in manala_php_sapis)
-#   tags:
-#     - manala_php
-#
+# Fpm pools
+- include: fpm_pools.yml
+  when: "'fpm' in lookup(
+    'manala_php_sapis',
+    manala_php_sapis,
+    manala_php_versions[manala_php_version|string],
+    wantstate='present',
+    wantmap=true,
+    wantlist=true
+  )"
+  tags:
+    - manala_php
+
 # # Blackfire
 # - include: blackfire.yml
 #   when: manala_php_blackfire
