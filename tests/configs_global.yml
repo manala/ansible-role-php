@@ -1,13 +1,14 @@
 ---
 
-- name: Configs - Global - Wheezy - Php 5.4
+- name: Configs - Global - Wheezy - 5.4
   hosts: wheezy
   vars:
     manala_php_version: 5
     manala_php_sapis_exclusive: false
     manala_php_sapis:
       - cli
-      - fpm
+      - sapi:  fpm
+        state: present
     manala_php_configs_global: true
     manala_php_configs_exclusive: true
     manala_php_configs:

@@ -1,6 +1,6 @@
 ---
 
-- name: Install - Wheezy - Php 5.4
+- name: Install - Wheezy - 5.4
   hosts: wheezy
   vars:
     manala_php_version: 5
@@ -52,7 +52,7 @@
               stdout:
                 - PHP 5.4.
 
-- name: Install - Wheezy - Php 5.5
+- name: Install - Wheezy - 5.5
   hosts: wheezy
   vars:
     manala_php_version: 5
@@ -104,7 +104,7 @@
               stdout:
                 - PHP 5.5.
 
-- name: Install - Wheezy - Php 5.6
+- name: Install - Wheezy - 5.6
   hosts: wheezy
   vars:
     manala_php_version: 5
