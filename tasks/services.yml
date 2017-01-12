@@ -6,4 +6,11 @@
     state: started
   with_items:
     - "php{{ manala_php_version|string }}-fpm"
-  when: "'fpm' in manala_php_sapis"
+  when: "'fpm' in lookup(
+    'manala_php_sapis',
+    manala_php_sapis,
+    manala_php_versions[manala_php_version|string],
+    wantstate='present',
+    wantmap=true,
+    wantlist=true
+  )"
