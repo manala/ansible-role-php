@@ -5,10 +5,10 @@ manala_php_version: ~
 
 # Sapis
 manala_php_sapis_exclusive: false
-manala_php_sapis:           ['cli', 'fpm'] # Ensure backward compatibility
+manala_php_sapis:           []
 
 # Extensions
-manala_php_extensions_exclusive: true # Ensure backward compatibility
+manala_php_extensions_exclusive: false
 manala_php_extensions:           []
 
 # Configs
