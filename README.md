@@ -174,11 +174,11 @@ manala_php_fpm_pools:
 ```yaml
 manala_php_blackfire: true
 
-manala_php_blackfire_agent:
+manala_php_blackfire_agent_config:
   - server-id: your-server-id
   - server-token: your-token-id
 
-manala_php_blackfire_client:
+manala_php_blackfire_client_config:
   - client-id: your-client-id
   - client-token: your-client-token
 ```

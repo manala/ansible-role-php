@@ -33,15 +33,15 @@ manala_php_fpm_pools:
 
 
 # Blackfire
-manala_php_blackfire:                false
+manala_php_blackfire: false
 
-manala_php_blackfire_agent_file:     /etc/blackfire/agent
-manala_php_blackfire_agent_template: ~
-manala_php_blackfire_agent:          []
+manala_php_blackfire_agent_config_file:     /etc/blackfire/agent
+manala_php_blackfire_agent_config_template: ~
+manala_php_blackfire_agent_config:          []
 
-manala_php_blackfire_client_file:     ~/.blackfire.ini
-manala_php_blackfire_client_template: ~
-manala_php_blackfire_client:          []
+manala_php_blackfire_client_config_file:     ~/.blackfire.ini
+manala_php_blackfire_client_config_template: ~
+manala_php_blackfire_client_config:          []
 
 # Applications
 manala_php_applications_dir: /usr/local/bin
