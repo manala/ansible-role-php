@@ -8,11 +8,6 @@ It's part of the Manala <a href="http://www.manala.io" target="_blank">Ansible s
 
 This role is made to work with the __dotdeb__ php debian packages, available on the [__dotdeb__ debian repository](https://www.dotdeb.org/). Please use the [**manala.apt**](https://galaxy.ansible.com/manala/apt/) role to handle it properly.
 
-```yaml
-manala_apt_preferences:
- - php@dotdeb
-```
-
 ## Dependencies
 
 None.
@@ -35,32 +30,106 @@ Using ansible galaxy requirements file:
 
 ## Role Handlers
 
-| Name              | Type    | Description     |
-| ----------------- | ------- | --------------- |
-| `php fpm restart` | Service | Restart php-fpm |
+| Name                          | Type    | Description                                           |
+| ----------------------------- | ------- | ----------------------------------------------------- |
+| `php fpm restart`             | Service | Check php fpm configuration and restart service if ok |
+| `php blackfire agent restart` | Service | Restart php blackfire agent service                   |
 
 ## Role Variables
 
-| Name                             | Default              | Type    | Description                                            |
-| -------------------------------- | -------------------- | ------  | ------------------------------------------------------ |
-| `manala_php_sapis`               | [cli, fpm]           | Array   | A list of the PHP SAPIs to install.                    |
-| `manala_php_extensions`          | [ ]                  | Array   | A list of the php extensions to install.               |
-| `manala_php_configs_dir_base`    | /etc/php5            | String  | Configs directory path.                                |
-| `manala_php_configs_template`    | configs/empty.j2     | String  | Default configuration template.                        |
-| `manala_php_configs_exclusive`   | false                | Boolean | Whether to remove all other non-specified config files |
-| `manala_php_configs`             | [ ]                  | Array   | Shared configurations.                                 |
-| `manala_php_fpm_configs`         | [ ]                  | Array   | PHP fpm additional configurations.                     |
-| `manala_php_cli_configs`         | [ ]                  | Array   | PHP cli additional configurations.                     |
-| `manala_php_fpm_pools_template`  | fpm_pools/empty.j2   | String  | Default pool template.                                 |
-| `manala_php_fpm_pools_exclusive` | false                | Boolean | Whether to remove all other non-specified pool files   |
-| `manala_php_fpm_pools`           | [ {name: www.conf} ] | Array   | PHP fpm pools configurations.                          |
+| Name                                          | Default                           | Type             | Description                                             |
+| --------------------------------------------- | --------------------------------- | ---------------- | ------------------------------------------------------- |
+| `manala_php_version`                          | ~                                 | String|Int|Float | Php version                                             |
+| `manala_php_sapis_exclusive`                  | false                             | Boolean          | Should the SAPIs list be exclusive ?                    |
+| `manala_php_sapis`                            | []                                | Array            | A list of PHP SAPIs                                     |
+| `manala_php_extensions_exclusive`             | false                             | Boolean          | Should the extensions list be exclusive ?               |
+| `manala_php_extensions`                       | []                                | Array            | A list of PHP extensions                                |
+| `manala_php_configs_global`                   | false                             | Boolean          | Should configs be global for all SAPIs ? (php 5.4 only) |
+| `manala_php_configs_template`                 | ~ ('configs/empty.j2')            | String           | Configs base template                                   |
+| `manala_php_configs_exclusive:`               | false                             | Boolean          | Should configs files be exclusive ?                     |
+| `manala_php_configs`                          | []                                | Array            | Configs files                                           |
+| `manala_php_cli_configs`                      | []                                | Array            | Configs files (cli SAPI only)                           |
+| `manala_php_fpm_configs`                      | []                                | Array            | Configs files (fpm SAPI only)                           |
+| `manala_php_cgi_configs`                      | []                                | Array            | Configs files (cgi SAPI only)                           |
+| `manala_php_phpdbg_configs`                   | []                                | Array            | Configs files (phpdbg SAPI only)                        |
+| `manala_php_fpm_pools_template`               | ~ ('fpm_pools/empty.j2')          | String           | Fpm pools base template                                 |
+| `manala_php_fpm_pools_exclusive`              | false                             | Boolean          | Should fpm pools files be exclusive ?                   |
+| `manala_php_fpm_pools`                        | [...]                             | Array            | Fpm pools files                                         |
+| `manala_php_blackfire`                        | false                             | Boolean          | Install blackfire                                       |
+| `manala_php_blackfire_agent_config_file`      | '/etc/blackfire/agent'            | String           | Blackfire agent config file                             |
+| `manala_php_blackfire_agent_config_template`  | ~ ('blackfire/agent/default.j2')  | String           | Blackfire agent config base template                    |
+| `manala_php_blackfire_agent_config`           | []                                | Array            | Blackfire agent config                                  |
+| `manala_php_blackfire_client_config_file`     | '~/.blackfire.ini'                | String           | Blackfire client config file                            |
+| `manala_php_blackfire_client_config_template` | ~ ('blackfire/client/default.j2') | String           | Blackfire client config base template                   |
+| `manala_php_blackfire_client_config`          | []                                | Array            | Blackfire client config                                 |
+| `manala_php_applications_dir`                 | '/usr/local/bin'                  | String           | Applications directory                                  |
+| `manala_php_applications`                     | []                                | Array            | A list of php applications                              |
 
 ### Configuration example
+
+#### Version
+
+Php 5.4 (Debian wheezy only)
+```yaml
+manala_apt_preferences:
+  - php@dotdeb
+
+manala_php_version: 5
+```
+
+Php 5.5 (Debian wheezy only)
+```yaml
+manala_apt_preferences:
+  - php@dotdeb_php55
+
+manala_php_version: 5
+```
+
+Php 5.6 (Debian wheezy only)
+```yaml
+manala_apt_preferences:
+  - php@dotdeb_php56
+
+manala_php_version: 5
+```
+
+Php 7.0 (Debian jessie only)
+```yaml
+manala_apt_preferences:
+  - php@dotdeb
+
+manala_php_version: 7.0
+```
+
+#### SAPIs
+
+```yaml
+manala_php_extensions_exclusive: true # Ensure other extensions are automatically absents
+manala_php_extensions:
+  - intl
+  - gd
+  - extension: gd
+    state:     absent
+  - extension: xdebug
+    enabled:   false # Ensure extension will be installed *but* disabled
+```
+
+#### Extensions
+
+```yaml
+manala_php_sapis_exclusive: true # Ensure other sapis are automatically absents
+manala_php_sapis:
+  - cli
+  - fpm
+  - sapi:  cgi
+    state: absent
+```
 
 #### PHP client only
 
 ```yaml
-manala_php_sapis: ['cli']
+manala_php_sapis:
+  - cli
 
 manala_php_extensions:
   - curl
