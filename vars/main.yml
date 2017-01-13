@@ -138,10 +138,10 @@ manala_php_applications_patterns:
   phpcbf:
     source: https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
   openl10n:
-    source_version: https://github.com/openl10n/openl10n-cli/releases/download/v%version%/openl10n.phar
+    source_version: https://github.com/openl10n/openl10n-cli/releases/download/{version}/openl10n.phar
   phpunit:
     source:         https://phar.phpunit.de/phpunit.phar
-    source_version: https://phar.phpunit.de/phpunit-%version%.phar
+    source_version: https://phar.phpunit.de/phpunit-{version}.phar
   php-cs-fixer:
     source: http://get.sensiolabs.org/php-cs-fixer.phar
   couscous:
