@@ -104,6 +104,17 @@ manala_php_version: 7.0
 #### SAPIs
 
 ```yaml
+manala_php_sapis_exclusive: true # Ensure other sapis are automatically absents
+manala_php_sapis:
+  - cli
+  - fpm
+  - sapi:  cgi
+    state: absent
+```
+
+#### Extensions
+
+```yaml
 manala_php_extensions_exclusive: true # Ensure other extensions are automatically absents
 manala_php_extensions:
   - intl
@@ -112,17 +123,6 @@ manala_php_extensions:
     state:     absent
   - extension: xdebug
     enabled:   false # Ensure extension will be installed *but* disabled
-```
-
-#### Extensions
-
-```yaml
-manala_php_sapis_exclusive: true # Ensure other sapis are automatically absents
-manala_php_sapis:
-  - cli
-  - fpm
-  - sapi:  cgi
-    state: absent
 ```
 
 #### PHP client only
