@@ -27,7 +27,7 @@
     wantlist=true
   )"
 
-- name: blackfire-agent restart
+- name: php blackfire agent restart
   service:
     name:  blackfire-agent
     state: restarted
