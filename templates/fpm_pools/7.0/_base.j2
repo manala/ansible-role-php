@@ -1,4 +1,4 @@
-{%- for configs in item.config|default(['www']) -%}
+{%- for configs in item.config|default([config_name_default]) -%}
 
     {%- for config_name, config in ({configs: []} if (configs is string) else configs).iteritems() -%}
 
