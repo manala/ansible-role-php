@@ -1,6 +1,6 @@
 {%- import '_macros.j2' as macros with context -%}
 
-{%- config_name_default = 'admin' -%}
+{%- set config_name_default = 'admin' -%}
 
 {%- set config_default = {
   'listen':          '/run/php-fpm.admin.sock',
