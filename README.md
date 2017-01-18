@@ -125,115 +125,56 @@ manala_php_extensions:
     enabled:   false # Ensure extension will be installed *but* disabled
 ```
 
-#### PHP client only
+#### Configs
 
+Php 5.4 only
 ```yaml
-manala_php_sapis:
-  - cli
-
-manala_php_extensions:
-  - curl
-  - mysqlnd
-
-manala_php_configs:
-  - file: default.ini
-    config:
-      - date.timezone:  UTC
+manala_php_configs_global: true
 ```
 
-#### PHP client and fpm basic setup
-
+All sapis
 ```yaml
-manala_php_sapis: ['cli', 'fpm']
-
-manala_php_extensions:
-  - curl
-  - mysqlnd
-  - intl
-
 manala_php_configs:
   - file: default.ini
     config:
       - date.timezone: UTC
+```
 
+Sapis specific
+```yaml
+# Fpm
 manala_php_fpm_configs:
-  - file: env_dev.ini
+  - file: app.ini
     # A development environment template with some preconfigured directives.
     template: configs/default.dev.j2
     config:
-      # Default parameters
-      - display_errors:                  true
-      - display_startup_errors:          true
-      - error_reporting:                 E_ALL
-      - html_errors:                     true
-      - log_errors:                      true
-      - max_input_time:                  60
-      - output_buffering:                4096
-      - register_argc_argv:              false
-      - request_order:                   GP
-      - short_open_tag:                  false
-      - track_errors:                    true
-      - variables_order:                 GPCS
-      - expose_php:                      true
-      - memory_limit:                    512M
-      - session.gc_divisor:              1000
-      - session.hash_bits_per_character: 5
-      - url_rewriter.tags:               a=href,area=href,frame=src,input=src,form=fakeentry
-      # And add extra parameters.
-      - session.name:                    sid
-      - php_post_max_size:               32M
-  - file: env_prod.ini
-    # A production environment template with some preconfigured directives.
-    template: configs/default.prod.j2
+      - max_input_time:   60
+      - output_buffering: 4096
+      - expose_php:       true
+      - memory_limit:     512M
+
+# Cli
+manala_php_cli_configs:
+  - file: app.ini
+    # A development environment template with some preconfigured directives.
+    template: configs/default.staging.j2
     config:
-      # Default parameters
-      - display_errors:                  false
-      - display_startup_errors:          false
-      - error_reporting:                 E_ALL & ~E_DEPRECATED & ~E_STRICT
-      - html_errors:                     true
-      - log_errors:                      true
-      - max_input_time:                  60
-      - output_buffering:                4096
-      - register_argc_argv:              false
-      - request_order:                   GP
-      - short_open_tag:                  false
-      - track_errors:                    false
-      - variables_order:                 GPCS
-      - expose_php:                      false
-      - memory_limit:                    512M
-      - session.gc_divisor:              1000
-      - session.hash_bits_per_character: 5
-      - url_rewriter.tags:               a=href,area=href,frame=src,input=src,form=fakeentry
-      # And add extra parameters.
-      - session.name:                    sid
-      - php_post_max_size:               32M
+      - max_input_time:   -1
+      - output_buffering: 4096
+      - expose_php:       false
+      - memory_limit:     2G
 ```
 
-#### PHP fpm pools
+#### Fpm pools
 
 ```yaml
-manala_php_sapis: ['cli', 'fpm']
-
 manala_php_fpm_pools:
-  - file:     www.conf
-    # default template
-    template: fpm_pools/default.j2
+  - file: www.conf
     config:
-      # Default parameters
-      - name:                     www
-      - user:                     www-data
-      - group:                    www-data
-      - listen:                   127.0.0.1:  9000
-      - listen.backlog:           128
-      - listen.owner:             www-data
-      - listen.group:             www-data
-      - pm:                       dynamic
       - pm.max_children:          5
       - pm.start_servers:         2
       - pm.min_spare_servers:     1
       - pm.max_spare_servers:     3
-      # Add extra parameters
-      - request_slowlog_timeout:  30s
       - env[HOSTNAME]:            $HOSTNAME
       - php_flag[display_errors]: true
 ```
