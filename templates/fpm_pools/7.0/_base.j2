@@ -3,7 +3,7 @@
     {%- for config_name, config in ({configs: []} if (configs is string) else configs).iteritems() -%}
 
 ; Start a new pool named '{{ config_name }}'.
-; the variable $pool can we used in any directive and will be replaced by the
+; the variable $pool can be used in any directive and will be replaced by the
 ; pool name ('{{ config_name }}' here)
 [{{ config_name }}]
 
@@ -71,7 +71,7 @@
 ;       - The pool processes will inherit the master process priority
 ;         unless it specified otherwise
 ; Default Value: no set
-{{ macros.config_row(config, 'process.priority', ';process.priority = -19', true) }}
+{{ macros.config_row(config, 'process.priority', '; process.priority = -19', true) }}
 
 ; Choose how the process manager will control the number of child processes.
 ; Possible Values:
@@ -128,7 +128,7 @@
 ; The number of seconds after which an idle process will be killed.
 ; Note: Used only when pm is set to 'ondemand'
 ; Default Value: 10s
-{{ macros.config_row(config, 'pm.process_idle_timeout', ';pm.process_idle_timeout = 10s', true) }}
+{{ macros.config_row(config, 'pm.process_idle_timeout', ';pm.process_idle_timeout = 10s;', true) }}
 
 ; The number of requests each child process should execute before respawning.
 ; This can be useful to work around memory leaks in 3rd party libraries. For
@@ -304,12 +304,12 @@
 ;      it can accept a strftime(3) format:
 ;      %d/%b/%Y:%H:%M:%S %z (default)
 ;      The strftime(3) format must be encapsuled in a %{<strftime_format>}t tag
-;      e.g. for a ISO8601 formatted timestring, use: {% raw %}%{%Y-%m-%dT%H:%M:%S%z}t{% endraw %}
+;      e.g. for a ISO8601 formatted timestring, use: {{ '%{%Y-%m-%dT%H:%M:%S%z}t' }}
 ;  %T: time the log has been written (the request has finished)
 ;      it can accept a strftime(3) format:
 ;      %d/%b/%Y:%H:%M:%S %z (default)
 ;      The strftime(3) format must be encapsuled in a %{<strftime_format>}t tag
-;      e.g. for a ISO8601 formatted timestring, use: {% raw %}%{%Y-%m-%dT%H:%M:%S%z}t{% endraw %}
+;      e.g. for a ISO8601 formatted timestring, use: {{ '%{%Y-%m-%dT%H:%M:%S%z}t' }}
 ;  %u: remote user
 ;
 ; Default: "%R - %u %t \"%m %r\" %s"
