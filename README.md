@@ -39,7 +39,7 @@ Using ansible galaxy requirements file:
 
 | Name                                          | Default                     | Type             | Description                                             |
 | --------------------------------------------- | --------------------------- | ---------------- | ------------------------------------------------------- |
-| `manala_php_version`                          | ~                           | String|Int|Float | Php version                                             |
+| `manala_php_version`                          | ~                           | String,Int,Float | Php version                                             |
 | `manala_php_sapis_exclusive`                  | false                       | Boolean          | Should the SAPIs list be exclusive ?                    |
 | `manala_php_sapis`                            | []                          | Array            | A list of PHP SAPIs                                     |
 | `manala_php_extensions_exclusive`             | false                       | Boolean          | Should the extensions list be exclusive ?               |
