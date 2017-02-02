@@ -5,7 +5,7 @@
     src:  "{{ item.template|default(manala_php_configs_template|ternary(manala_php_configs_template, 'configs/empty.j2')) }}"
     dest: "{{ manala_php_versions[manala_php_version|string]['config_dir'] }}/{{ __manala_php_sapi }}/conf.d/{{ item.file }}"
   notify:
-    - php fpm restart
+    - "php {{ __manala_php_sapi }} restart"
   with_manala_php_configs: "{{ manala_php_configs + vars['manala_php_' + __manala_php_sapi + '_configs'] }}"
 
 - name: configs > {{ __manala_php_sapi|capitalize }} - Exclusive - Find files
@@ -25,4 +25,4 @@
   when: manala_php_configs_exclusive and (item not in (manala_php_configs + manala_php_{{ __manala_php_sapi }}_configs)|map(attribute='file'))
   with_items: "{{ __manala_php_configs_exclusive_find_result.stdout_lines|default([]) }}"
   notify:
-    - php fpm restart
+    - "php {{ __manala_php_sapi }} restart"
