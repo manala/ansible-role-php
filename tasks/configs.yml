@@ -1,0 +1,34 @@
+---
+
+- name: configs > {{ __manala_php_sapi|capitalize }} - Templates
+  template:
+    src:  "{{ item.template|default(manala_php_configs_template|ternary(manala_php_configs_template, 'configs/empty.j2')) }}"
+    dest: /etc/php/{{ manala_php_version|string }}/{{ __manala_php_sapi }}/conf.d/{{ item.file }}
+  notify:
+    - "php {{ __manala_php_sapi }} restart"
+  with_manala_php_configs: "{{ manala_php_configs + vars['manala_php_' + __manala_php_sapi + '_configs'] }}"
+  tags:
+    - manala_php
+
+- name: configs > {{ __manala_php_sapi|capitalize }} - Exclusive - Find files
+  # configs files coming with php packages are nothing but symlinks,
+  # so that we can distinguich them from our own files
+  command: "find -type f -printf '%P\n'"
+  args:
+    chdir: /etc/php/{{ manala_php_version|string }}/{{ __manala_php_sapi }}/conf.d
+  changed_when: false
+  register: __manala_php_configs_exclusive_find_result
+  when: manala_php_configs_exclusive
+  tags:
+    - manala_php
+
+- name: configs > {{ __manala_php_sapi|capitalize }} - Exclusive - Remove files
+  file:
+    path: /etc/php/{{ manala_php_version|string }}/{{ __manala_php_sapi }}/conf.d/{{ item }}
+    state: absent
+  when: manala_php_configs_exclusive and (item not in (manala_php_configs + vars['manala_php_' + __manala_php_sapi + '_configs'])|map(attribute='file'))
+  with_items: "{{ __manala_php_configs_exclusive_find_result.stdout_lines|default([]) }}"
+  notify:
+    - "php {{ __manala_php_sapi }} restart"
+  tags:
+    - manala_php

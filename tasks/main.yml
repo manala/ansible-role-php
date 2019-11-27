@@ -1,0 +1,60 @@
+---
+
+# Install
+- import_tasks: install.yml
+  tags:
+    - manala_php
+
+# Extensions
+- import_tasks: extensions.yml
+  tags:
+    - manala_php
+
+# Configs
+- include: configs.yml
+  with_items: "{{
+    lookup(
+      'manala_php_sapis',
+      manala_php_sapis|default(manala_php_sapis_default, True),
+      manala_php_sapis_available,
+      wantstate='present',
+      wantmap=true,
+      wantlist=true
+    )
+  }}"
+  loop_control:
+    loop_var: __manala_php_sapi
+  tags:
+    - manala_php
+
+# Fpm pools
+- import_tasks: fpm_pools.yml
+  when: |
+    'fpm' in lookup(
+      'manala_php_sapis',
+      manala_php_sapis|default(manala_php_sapis_default, True),
+      manala_php_sapis_available,
+      wantstate='present',
+      wantmap=true,
+      wantlist=true
+    )
+  tags:
+    - manala_php
+
+# Blackfire
+- import_tasks: blackfire.yml
+  when: manala_php_blackfire
+  tags:
+    - manala_php
+
+# Services
+- import_tasks: services.yml
+  tags:
+    - manala_php
+    - manala_php.services
+    - manala.services
+
+# Applications
+- import_tasks: applications.yml
+  tags:
+    - manala_php
